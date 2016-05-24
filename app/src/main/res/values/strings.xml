@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ListaSpesa</string>
     <string name="action_settings">Settings</string>
+
+    <string name="element_removed">Element removed!</string>
+    <string name="snack_action_undo">UNDO</string>
 </resources>

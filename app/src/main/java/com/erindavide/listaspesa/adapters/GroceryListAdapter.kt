@@ -1,6 +1,7 @@
 package com.erindavide.listaspesa.adapters
 
 import android.content.Context
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,7 @@ import java.util.*
  */
 
 
-class GroceryListAdapter(context: Context): RecyclerView.Adapter<GroceryListAdapter.GroceryItemVH>(){
+class GroceryListAdapter(context: Context) : RecyclerView.Adapter<GroceryListAdapter.GroceryItemVH>() {
 
     val inflater = LayoutInflater.from(context)
 
@@ -22,7 +23,7 @@ class GroceryListAdapter(context: Context): RecyclerView.Adapter<GroceryListAdap
     val data = LinkedList<String>()
 
 
-    init{
+    init {
         // TODO remove
         data.add("Pane")
         data.add("Dentifricio")
@@ -30,29 +31,36 @@ class GroceryListAdapter(context: Context): RecyclerView.Adapter<GroceryListAdap
         data.add("Olive")
         data.add("Sedano")
         data.add("Frutta")
-        notifyItemRangeInserted(0,6)
+        notifyItemRangeInserted(0, 6)
     }
 
     fun addItem(value: String) {
         data.add(value)
-        notifyItemInserted(data.size-1)
+        notifyItemInserted(data.size - 1)
     }
 
     override fun getItemCount(): Int = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): GroceryItemVH {
         return GroceryItemVH(inflater.inflate(R.layout.item_grocery_list, parent, false))
-        }
+    }
 
     override fun onBindViewHolder(holder: GroceryItemVH, position: Int) {
         holder.textView.text = data[position]
     }
 
 
+    fun onItemDismiss(position: Int, viewHolder: RecyclerView.ViewHolder) {
+        val item = data[position]
 
-    fun onItemDismiss(position: Int) {
         data.removeAt(position);
         notifyItemRemoved(position);
+
+        Snackbar.make(viewHolder.itemView, R.string.element_removed, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snack_action_undo, {
+                    data.add(position, item)
+                    notifyItemInserted(position)
+                }).show()
     }
 
     fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
@@ -62,7 +70,7 @@ class GroceryListAdapter(context: Context): RecyclerView.Adapter<GroceryListAdap
     }
 
 
-    class GroceryItemVH(view: View): RecyclerView.ViewHolder(view){
+    class GroceryItemVH(view: View) : RecyclerView.ViewHolder(view) {
         val textView = view.findViewById(R.id.textView) as TextView
     }
 }

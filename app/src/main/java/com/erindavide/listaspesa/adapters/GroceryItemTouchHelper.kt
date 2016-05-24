@@ -37,7 +37,7 @@ class GroceryItemTouchHelper(val mAdapter: GroceryListAdapter) : ItemTouchHelper
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, side: Int) {
         //side can be START or END
         // Notify the adapter of the dismissal
-        mAdapter.onItemDismiss(viewHolder.adapterPosition);
+        mAdapter.onItemDismiss(viewHolder.adapterPosition, viewHolder);
     }
 
 
