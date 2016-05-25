@@ -4,4 +4,6 @@
 
     <string name="element_removed">Element removed!</string>
     <string name="snack_action_undo">UNDO</string>
+    <string name="product_name">Product name</string>
+    <string name="create">Create</string>
 </resources>

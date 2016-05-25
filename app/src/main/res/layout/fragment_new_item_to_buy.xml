@@ -10,21 +10,21 @@
     tools:context="com.erindavide.listaspesa.activities.NewItemToBuyActivity">
 
     <EditText
+        android:id="@+id/edit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_name"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
-        android:hint="Product name" />
+        android:hint="@string/product_name" />
 
     <Button
+        android:id="@+id/button_create"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create"
-        android:id="@+id/button_create"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@id/edit_name"
+        android:layout_centerHorizontal="true"
+        android:text="@string/create" />
 
 </RelativeLayout>

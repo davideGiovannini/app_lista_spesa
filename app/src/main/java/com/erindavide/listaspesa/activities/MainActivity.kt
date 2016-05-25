@@ -13,14 +13,17 @@ import com.erindavide.listaspesa.R
 import com.erindavide.listaspesa.adapters.GroceryItemDecoration
 import com.erindavide.listaspesa.adapters.GroceryItemTouchHelper
 import com.erindavide.listaspesa.adapters.GroceryListAdapter
+import com.erindavide.listaspesa.fragments.NewGroceryItemBottomSheetFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NewGroceryItemBottomSheetFragment.OnGroceryItemCreation {
+
 
     private lateinit var adapter: GroceryListAdapter
+    private lateinit var newGroceryItemModal: NewGroceryItemBottomSheetFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +31,11 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar?
         setSupportActionBar(toolbar)
 
+        newGroceryItemModal = NewGroceryItemBottomSheetFragment()
+
 
         fab.setOnClickListener { view ->
-            val intent = Intent(this, NewItemToBuyActivity::class.java)
-            startActivityForResult(intent, Actions.NEW_GROCERY_ITEM)
+            NewGroceryItemBottomSheetFragment().show(supportFragmentManager, newGroceryItemModal.tag)
         }
 
         setupRecycleView()
@@ -82,6 +86,11 @@ class MainActivity : AppCompatActivity() {
         val callback = GroceryItemTouchHelper(adapter)
         val mItemTouchHelper = ItemTouchHelper(callback)
         mItemTouchHelper.attachToRecyclerView(recycler_view)
+    }
+
+
+    override fun onCreateGroceryItem(value: String) {
+        adapter.addItem(value)
     }
 
     companion object {
