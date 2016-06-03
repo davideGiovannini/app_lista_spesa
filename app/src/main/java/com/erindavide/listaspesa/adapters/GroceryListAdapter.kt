@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.erindavide.listaspesa.R
+import com.erindavide.listaspesa.db.database
+import com.erindavide.listaspesa.db.insertProduct
+import com.erindavide.listaspesa.model.Product
 import java.util.*
 
 /**
@@ -15,7 +18,7 @@ import java.util.*
  */
 
 
-class GroceryListAdapter(context: Context) : RecyclerView.Adapter<GroceryListAdapter.GroceryItemVH>() {
+class GroceryListAdapter(val context: Context) : RecyclerView.Adapter<GroceryListAdapter.GroceryItemVH>() {
 
     val inflater = LayoutInflater.from(context)
 
@@ -23,19 +26,9 @@ class GroceryListAdapter(context: Context) : RecyclerView.Adapter<GroceryListAda
     val data = LinkedList<String>()
 
 
-    init {
-        // TODO remove
-        data.add("Pane")
-        data.add("Dentifricio")
-        data.add("Pasta")
-        data.add("Olive")
-        data.add("Sedano")
-        data.add("Frutta")
-        notifyItemRangeInserted(0, 6)
-    }
 
     fun addItem(value: String) {
-        data.add(value)
+        context.database.use { insertProduct(Product(value)) }
         notifyItemInserted(data.size - 1)
     }
 
