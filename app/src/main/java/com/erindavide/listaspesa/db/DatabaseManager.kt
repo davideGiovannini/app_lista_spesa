@@ -10,7 +10,7 @@ import org.jetbrains.anko.db.*
  */
 
 
-const  val ENTRIES_TABLE = "product"
+const val ENTRIES_TABLE = "product"
 const val ROW_ID = "_id"
 const val ROW_NAME = "name"
 const val ROW_PRICE = "price"
@@ -18,14 +18,14 @@ const val ROW_QUANTITY = "quantity"
 private const val TAG = "DatabaseManager"
 
 
-class DatabaseManager(context: Context) : ManagedSQLiteOpenHelper(context, "ShareShopDB", null, 1){
+class DatabaseManager(context: Context) : ManagedSQLiteOpenHelper(context, "ShareShopDB", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable(ENTRIES_TABLE, true, // IF_NOT_EXISTS
                 ROW_ID to INTEGER + PRIMARY_KEY + UNIQUE,
                 ROW_NAME to TEXT + NOT_NULL,
-                ROW_PRICE to TEXT,
-                ROW_QUANTITY to TEXT
+                ROW_PRICE to REAL,
+                ROW_QUANTITY to INTEGER
         )
     }
 
@@ -52,14 +52,19 @@ val Context.database: DatabaseManager
     get() = DatabaseManager.getInstance(applicationContext)
 
 
-fun SQLiteDatabase.insertProduct(product: Product) {
+fun SQLiteDatabase.insertProduct(product: Product): Long = insert(ENTRIES_TABLE,
+        ROW_NAME to product.name,
+        ROW_PRICE to product.price,
+        ROW_QUANTITY to product.quantity
+)
 
-    insert(ENTRIES_TABLE,
-            ROW_NAME to product.name,
-            ROW_PRICE to product.price,
-            ROW_QUANTITY to product.quantity
-    )
-}
+fun SQLiteDatabase.reinsertProduct(product: Product): Long = insert(ENTRIES_TABLE,
+        ROW_ID to product.id,
+        ROW_NAME to product.name,
+        ROW_PRICE to product.price,
+        ROW_QUANTITY to product.quantity
+)
+
 
 fun SQLiteDatabase.updateProduct(product: Product) {
 
@@ -76,6 +81,16 @@ fun SQLiteDatabase.getProduct(id: Long): Product =
                 .where("$ROW_ID = {id}", "id" to id)
                 .exec { parseSingle(Product.parser) }
 
+fun SQLiteDatabase.deleteProduct(id: Long) : Product{
+    // TODO maybe use a transaction in here
+    val p = getProduct(id)
+    delete(ENTRIES_TABLE, "$ROW_ID = {id}", "id" to id)
+    return p
+}
+
+
+fun SQLiteDatabase.getProductsIdList(): MutableList<Long> =
+        select(ENTRIES_TABLE, ROW_ID).parseList(LongParser).toMutableList()
 
 fun SQLiteDatabase.getEntries(query: String? = null): List<Product> =
         when (query) {

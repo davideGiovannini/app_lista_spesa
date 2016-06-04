@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.erindavide.listaspesa.R
-import com.erindavide.listaspesa.db.database
-import com.erindavide.listaspesa.db.insertProduct
+import com.erindavide.listaspesa.db.*
 import com.erindavide.listaspesa.model.Product
 import java.util.*
 
@@ -23,12 +22,13 @@ class GroceryListAdapter(val context: Context) : RecyclerView.Adapter<GroceryLis
     val inflater = LayoutInflater.from(context)
 
     //TODO change
-    val data = LinkedList<String>()
+    val data = context.database.use {  getProductsIdList() }
 
 
 
     fun addItem(value: String) {
-        context.database.use { insertProduct(Product(value)) }
+        val id = context.database.use { insertProduct(Product(value)) }
+        data.add(id)
         notifyItemInserted(data.size - 1)
     }
 
@@ -39,19 +39,20 @@ class GroceryListAdapter(val context: Context) : RecyclerView.Adapter<GroceryLis
     }
 
     override fun onBindViewHolder(holder: GroceryItemVH, position: Int) {
-        holder.textView.text = data[position]
+        holder.textView.text = context.database.use { getProduct(data[position]) }.name
     }
 
 
     fun onItemDismiss(position: Int, viewHolder: RecyclerView.ViewHolder) {
-        val item = data[position]
+        val item = context.database.use { deleteProduct(data[position]) }
 
         data.removeAt(position);
         notifyItemRemoved(position);
 
         Snackbar.make(viewHolder.itemView, R.string.element_removed, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snack_action_undo, {
-                    data.add(position, item)
+                    val id = context.database.use { reinsertProduct(item) }
+                    data.add(position, id)
                     notifyItemInserted(position)
                 }).show()
     }
