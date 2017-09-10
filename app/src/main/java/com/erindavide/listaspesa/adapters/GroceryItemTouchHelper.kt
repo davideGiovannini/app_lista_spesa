@@ -3,7 +3,6 @@ package com.erindavide.listaspesa.adapters
 import android.graphics.Canvas
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import com.erindavide.listaspesa.utilities.clamp
 
 /**
  * Created by demiurgo on 5/24/16.
@@ -55,7 +54,7 @@ class GroceryItemTouchHelper(val mAdapter: GroceryListAdapter) : ItemTouchHelper
                 viewHolder.itemView.translationX = dX
             }
             ItemTouchHelper.ACTION_STATE_DRAG -> {
-                viewHolder.itemView.translationZ = DRAG_Z_TRANSLATION * dY.clamp()
+//                viewHolder.itemView.translationZ = DRAG_Z_TRANSLATION * dY.clamp()
                 viewHolder.itemView.translationY = dY
             }
             else -> {

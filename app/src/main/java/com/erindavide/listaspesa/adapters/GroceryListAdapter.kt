@@ -19,7 +19,7 @@ import java.util.*
 
 class GroceryListAdapter(val context: Context) : RecyclerView.Adapter<GroceryListAdapter.GroceryItemVH>() {
 
-    val inflater = LayoutInflater.from(context)
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     //TODO change
     val data = context.database.use {  getProductsIdList() }
@@ -65,6 +65,6 @@ class GroceryListAdapter(val context: Context) : RecyclerView.Adapter<GroceryLis
 
 
     class GroceryItemVH(view: View) : RecyclerView.ViewHolder(view) {
-        val textView = view.findViewById(R.id.textView) as TextView
+        val textView: TextView = view.findViewById(R.id.textView)
     }
 }

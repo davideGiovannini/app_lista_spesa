@@ -28,13 +28,13 @@ class MainActivity : AppCompatActivity(), NewGroceryItemBottomSheetFragment.OnGr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar?
+        val toolbar: Toolbar? = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         newGroceryItemModal = NewGroceryItemBottomSheetFragment()
 
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener { _ ->
             NewGroceryItemBottomSheetFragment().show(supportFragmentManager, newGroceryItemModal.tag)
         }
 
@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity(), NewGroceryItemBottomSheetFragment.OnGr
 
         when (requestCode) {
             Actions.NEW_GROCERY_ITEM -> {
-                if(resultCode == RESULT_OK && data?.hasExtra(Extras.GROCERY_ITEM_DATA) ?: false){
-                    adapter.addItem(data!!.getStringExtra(Extras.GROCERY_ITEM_DATA))
+                if(resultCode == RESULT_OK && data?.hasExtra(Extras.GROCERY_ITEM_DATA) == true){
+                    adapter.addItem(data.getStringExtra(Extras.GROCERY_ITEM_DATA))
                 }
             }
             else -> {

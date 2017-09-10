@@ -72,13 +72,13 @@ fun SQLiteDatabase.updateProduct(product: Product) {
             ROW_NAME to product.name,
             ROW_PRICE to product.price,
             ROW_QUANTITY to product.quantity)
-            .where("$ROW_ID = {id}", "id" to product.id).exec()
+            .whereArgs("$ROW_ID = {id}", "id" to product.id).exec()
 }
 
 
 fun SQLiteDatabase.getProduct(id: Long): Product =
         select(ENTRIES_TABLE)
-                .where("$ROW_ID = {id}", "id" to id)
+                .whereArgs("$ROW_ID = {id}", "id" to id)
                 .exec { parseSingle(Product.parser) }
 
 fun SQLiteDatabase.deleteProduct(id: Long) : Product{
@@ -96,7 +96,7 @@ fun SQLiteDatabase.getEntries(query: String? = null): List<Product> =
         when (query) {
             null -> select(ENTRIES_TABLE).parseList(Product.parser)
             else -> select(ENTRIES_TABLE)
-                    .where("$ROW_NAME like {query} ",
+                    .whereArgs("$ROW_NAME like {query} ",
                             "query" to "%$query%")
                     .parseList(Product.parser)
         }
